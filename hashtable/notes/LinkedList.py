@@ -6,6 +6,15 @@ class Node:
     def __repr__(self):
         return str(self.value)
 
+class HashTableEntry:
+    """
+    Linked List hash table key/value pair
+    """
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.next = None
+
 class LinkedList:
     def __init__(self):
         self.head = None
@@ -63,11 +72,11 @@ class LinkedList:
                 return curr
             curr = curr.next
         return None
-
-
-# ll = LinkedList()
-# ll.insert_at_head(1)
-# ll.insert_at_head(2)
-# ll.insert_at_head(3)
-# ll.insert_at_head_or_overwrite(4)
-# print(ll)
+    
+    def find_by_key(self, key):
+        curr = self.head
+        while curr is not None:
+            if curr.key == key:
+                return curr
+            curr = curr.next
+        return None 

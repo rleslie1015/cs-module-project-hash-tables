@@ -1,4 +1,4 @@
-from LinkedList import LinkedList
+from notes.LinkedList import LinkedList
 
 class HashTableEntry:
     """
@@ -152,7 +152,7 @@ class HashTable:
         entry = (self.storage[index].find_by_key(key))
         if entry: 
             return entry.value
-        
+
 
     def resize(self, new_capacity):
         """
