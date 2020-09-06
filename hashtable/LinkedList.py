@@ -6,6 +6,15 @@ class Node:
     def __repr__(self):
         return str(self.value)
 
+class HashTableEntry:
+    """
+    Linked List hash table key/value pair
+    """
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.next = None
+
 class LinkedList:
     def __init__(self):
         self.head = None
@@ -25,6 +34,7 @@ class LinkedList:
 
     # Runtime O(number of nodes)
     def insert_at_head_or_overwrite(self, node):
+        # node = Node(value)
         existingNode = self.find(node.value)
         if existingNode is not None:
             existingNode.value = node.value
@@ -62,13 +72,11 @@ class LinkedList:
                 return curr
             curr = curr.next
         return None
-
-a = Node(1)
-b = Node(2)
-c = Node(3)
-ll = LinkedList()
-ll.insert_at_head(a)
-ll.insert_at_head(b)
-ll.insert_at_head(c)
-ll.insert_at_head_or_overwrite(a)
-print(ll)
+    
+    def find_by_key(self, key):
+        curr = self.head
+        while curr is not None:
+            if curr.key == key:
+                return curr
+            curr = curr.next
+        return None 

@@ -1,3 +1,5 @@
+from LinkedList import LinkedList
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -7,7 +9,8 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
-
+    def __repr__(self):
+        return f'( {self.key} - {self.value} )'
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
@@ -20,10 +23,17 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
+    def __init__(self, capacity = MIN_CAPACITY):
         # Your code here
-        self.capacity = capacity
+        self.capacity = capacity 
         self.storage = [None] * capacity
+        self.number_of_elements = 0
+
+    def __repr__(self):
+        str1 = ''
+        for i in range(len(self.storage)):
+            str1 += f'( {i} : {str(self.storage[i])} ) \n'
+        return str1
 
     def get_num_slots(self):
         """
@@ -36,7 +46,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        pass
+        return len(self.storage)
 
 
     def get_load_factor(self):
@@ -46,7 +56,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        pass
+        lf = self.number_of_elements / self.get_num_slots()
+        return lf
 
 
     def fnv1(self, key):
@@ -68,6 +79,7 @@ class HashTable:
         # Your code here
         hash = 5381
         byte_arr = key.encode('utf-8')
+        # print('byte', byte_arr)
         for byte in byte_arr:
         # the modulus keeps it 32-bit, python ints don't overflow
             hash = ((hash * 33) ^ byte) % 0x100000000
@@ -91,7 +103,21 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        self.storage[index] = value
+
+        new_entry = HashTableEntry(key, value)
+
+        slot = self.storage[index]
+    
+        if slot is None:
+            ll = LinkedList()
+            ll.insert_at_head(new_entry)
+            self.storage[index] = ll
+        else: 
+            if slot.find_by_key(key) is not None:
+                slot.find_by_key(key).value = value
+            else:
+                slot.insert_at_head(new_entry)
+
 
 
     def delete(self, key):
@@ -104,7 +130,13 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        self.storage[index] = None
+        entry = self.storage[index].find_by_key(key)
+        # print('entry', entry)
+        value = None
+        if entry:
+            self.storage[index].delete(entry.value)
+            value = entry.value
+        return value
 
     def get(self, key):
         """
@@ -116,7 +148,11 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        return self.storage[index]
+
+        entry = (self.storage[index].find_by_key(key))
+        if entry: 
+            return entry.value
+        
 
     def resize(self, new_capacity):
         """
@@ -151,15 +187,33 @@ if __name__ == "__main__":
     for i in range(1, 13):
         print(ht.get(f"line_{i}"))
 
-    # # Test resizing
-    # old_capacity = ht.get_num_slots()
-    # ht.resize(ht.capacity * 2)
-    # new_capacity = ht.get_num_slots()
+    # Test resizing
+    old_capacity = ht.get_num_slots()
+    ht.resize(ht.capacity * 2)
+    new_capacity = ht.get_num_slots()
 
-    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
     # Test if data intact after resizing
-    # for i in range(1, 13):
-    #     print(ht.get(f"line_{i}"))
+    for i in range(1, 13):
+        print(ht.get(f"line_{i}"))
 
     print("")
+
+ht = HashTable(8)
+
+ht.put("key-0", "val-0")
+ht.put("key-1", "val-1")
+ht.put("key-2", "val-2")
+ht.put("key-3", "val-3")
+ht.put("key-4", "val-4")
+ht.put("key-5", "val-5")
+ht.put("key-6", "val-6")
+ht.put("key-7", "val-7")
+ht.put("key-8", "val-8")
+ht.put("key-9", "val-9")
+ht.put("key-0", "new-val-0")
+ht.put("key-1", "new-val-1")
+ht.get('key-0')
+print(ht.delete('key-0'))
+# print(ht)
