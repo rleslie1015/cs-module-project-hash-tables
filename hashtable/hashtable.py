@@ -90,7 +90,6 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
@@ -103,20 +102,26 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-
+        # create a new entry
         new_entry = HashTableEntry(key, value)
-
+        # reference the item at the hash_index
         slot = self.storage[index]
-    
+        # if there is nothing at the index create a LL and insert the entry at head
         if slot is None:
             ll = LinkedList()
             ll.insert_at_head(new_entry)
+            # assign the LL at the right index
             self.storage[index] = ll
+            self.number_of_elements += 1
+        # else if there is already something at the hash_index
         else: 
+            # if the key exist replace the value
             if slot.find_by_key(key) is not None:
                 slot.find_by_key(key).value = value
             else:
+                # if not then add entry to head
                 slot.insert_at_head(new_entry)
+                self.number_of_elements += 1
 
 
 
@@ -131,9 +136,11 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
         entry = self.storage[index].find_by_key(key)
-        # print('entry', entry)
+        
         value = None
+
         if entry:
+            self.number_of_elements -= 1
             self.storage[index].delete(entry.value)
             value = entry.value
         return value
@@ -148,8 +155,9 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-
+        # find by key
         entry = (self.storage[index].find_by_key(key))
+        # if exists return value
         if entry: 
             return entry.value
 
@@ -161,8 +169,20 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-        pass
+        # # Your code here
+        # store the current values
+        old_storage = self.storage
+        # make new array with new_capacity
+        new_array = [None] * new_capacity
+        # replace self.storage
+        self.storage = new_array
+        # loop through all LL in old_storage 
+        for ll in old_storage:
+            current = ll.head
+            while current is not None:
+                # insert each item into new_array
+                self.put(current.key, current.value)
+                current = current.next
 
 
 if __name__ == "__main__":
@@ -199,21 +219,3 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     print("")
-
-ht = HashTable(8)
-
-ht.put("key-0", "val-0")
-ht.put("key-1", "val-1")
-ht.put("key-2", "val-2")
-ht.put("key-3", "val-3")
-ht.put("key-4", "val-4")
-ht.put("key-5", "val-5")
-ht.put("key-6", "val-6")
-ht.put("key-7", "val-7")
-ht.put("key-8", "val-8")
-ht.put("key-9", "val-9")
-ht.put("key-0", "new-val-0")
-ht.put("key-1", "new-val-1")
-ht.get('key-0')
-print(ht.delete('key-0'))
-# print(ht)
