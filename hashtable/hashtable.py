@@ -134,13 +134,18 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # get the index
         index = self.hash_index(key)
+        # find the entry by key
         entry = self.storage[index].find_by_key(key)
         
-        value = None
-
+        value = None # value to return 
+        # if key exists in the LL 
         if entry:
+
+            # update number of elements 
             self.number_of_elements -= 1
+            # delete the value using LL delete method
             self.storage[index].delete(entry.value)
             value = entry.value
         return value
@@ -169,6 +174,12 @@ class HashTable:
 
         Implement this.
         """
+        # if lf > .7 
+            # double capacity
+        # else 
+            # change capcity to new_capi
+
+
         # # Your code here
         # store the current values
         old_storage = self.storage
