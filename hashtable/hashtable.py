@@ -26,7 +26,7 @@ class HashTable:
     def __init__(self, capacity = MIN_CAPACITY):
         # Your code here
         self.capacity = capacity 
-        self.storage = [None] * capacity
+        self.storage = [LinkedList()] * capacity
         self.number_of_elements = 0
 
     def __repr__(self):
@@ -101,12 +101,23 @@ class HashTable:
         Implement this.
         """
         # Your code here
+## automatic rehashing
+
+        # print('load factor ', self.get_load_factor())
+        # if self.get_load_factor() >= 0.7:
+        #     print('warning load factor is: ', self.get_load_factor())
+        #     self.resize(self.capacity*2)
+        #     print('resizing to: ', self.get_load_factor())
+
+##   get the index for the key
         index = self.hash_index(key)
         # create a new entry
         new_entry = HashTableEntry(key, value)
-        # reference the item at the hash_index
+##     search the linked list at the index for the key
+        # reference the item or linked list at the index
         slot = self.storage[index]
         # if there is nothing at the index create a LL and insert the entry at head
+##           insert the key and value at the head of the list at that index
         if slot is None:
             ll = LinkedList()
             ll.insert_at_head(new_entry)
@@ -115,7 +126,7 @@ class HashTable:
             self.number_of_elements += 1
         # else if there is already something at the hash_index
         else: 
-            # if the key exist replace the value
+##     if the key is found, overwrite the value stored there
             if slot.find_by_key(key) is not None:
                 slot.find_by_key(key).value = value
             else:
@@ -174,14 +185,9 @@ class HashTable:
 
         Implement this.
         """
-        # if lf > .7 
-            # double capacity
-        # else 
-            # change capcity to new_capi
-
-
         # # Your code here
         # store the current values
+        # ll = LinkedList()
         old_storage = self.storage
         # make new array with new_capacity
         new_array = [None] * new_capacity
@@ -194,6 +200,7 @@ class HashTable:
                 # insert each item into new_array
                 self.put(current.key, current.value)
                 current = current.next
+        
 
 
 if __name__ == "__main__":
