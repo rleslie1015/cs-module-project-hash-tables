@@ -26,7 +26,7 @@ class HashTable:
     def __init__(self, capacity = MIN_CAPACITY):
         # Your code here
         self.capacity = capacity 
-        self.storage = [LinkedList()] * capacity
+        self.storage = [None] * capacity
         self.number_of_elements = 0
 
     def __repr__(self):
@@ -103,11 +103,11 @@ class HashTable:
         # Your code here
 ## automatic rehashing
 
-        # print('load factor ', self.get_load_factor())
-        # if self.get_load_factor() >= 0.7:
-        #     print('warning load factor is: ', self.get_load_factor())
-        #     self.resize(self.capacity*2)
-        #     print('resizing to: ', self.get_load_factor())
+        print('load factor ', self.get_load_factor())
+        if self.get_load_factor() >= 0.7:
+            print('warning load factor is: ', self.get_load_factor())
+            self.resize(self.capacity*2)
+            print('resizing to: ', self.get_load_factor())
 
 ##   get the index for the key
         index = self.hash_index(key)
@@ -195,6 +195,7 @@ class HashTable:
         self.storage = new_array
         # loop through all LL in old_storage 
         for ll in old_storage:
+            # print('ll', ll)
             current = ll.head
             while current is not None:
                 # insert each item into new_array

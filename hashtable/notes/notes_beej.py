@@ -56,3 +56,30 @@ print(table)
 print(get("Beej"))  # 3490
 print(get("Goats!"))  # 9999
 
+# add a cache dict
+cache = {}
+
+
+def fib(n):
+	if n<= 1: return n
+	# if not in cache put it in cache
+	if n not in cache:
+		cache[n] = fib(n-1) + fib(n-2)
+	# return it
+	return cache[n]
+
+for i in range(100):
+	print(f'{i:3} {fib(i)}')
+
+d = {
+	'foo': 1,
+	'bar': 2,
+	'boo': 3
+}
+## sort dict by key
+# makde dict into list
+items = list(d.items())
+
+items.sort(key=lambda t: t[1])
+
+print(items)
