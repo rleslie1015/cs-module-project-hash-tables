@@ -189,6 +189,7 @@ class HashTable:
         # store the current values
         # ll = LinkedList()
         old_storage = self.storage
+        self.capacity = new_capacity
         # make new array with new_capacity
         new_array = [None] * new_capacity
         # replace self.storage
